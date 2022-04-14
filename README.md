@@ -16,6 +16,8 @@ that `kill -USR1 <pid>` directly.
 TODO
 
 ## Run command line options
+** Note: options are not implemented yet **
+
 The following options can be provided to `sigpr run <options> <command>`,
 options must be provided before the actual command
 
@@ -26,6 +28,8 @@ options must be provided before the actual command
   the process will trigger a restart of the command.
 
 ## Restart command line options
+** Note: options are not implemented yet **
+
 The following options can be provided to `sigpr restart <options>`
 
 - `--name <name>` will only restart the `sigpr run --name <name>` processes.
