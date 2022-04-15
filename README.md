@@ -15,4 +15,12 @@ make scripts that `kill -USR1 <pid>` directly.
 See `sigpr help` for all options and commands.
 
 ## Installation
-TODO
+Pre-built fully statically linked binaries can be found on the [release
+page](https://github.com/mrbech/sigpr/releases).
+
+Installation from source can be done with `cabal install`.
+
+`make build-static` will build a fully static binary and put in the current
+directory. If you have docker and docker-compose installed `make docker-run`
+will put you into a docker container that has necessary dependencies to do a
+static build.
