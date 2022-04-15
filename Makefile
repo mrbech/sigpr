@@ -1,6 +1,6 @@
-test-run: build-static
+run: build-static
 	./sigpr run echo 'test'
-test-restart: build-static
+restart: build-static
 	./sigpr restart
 build-static:
 	hpack && cabal install --installdir=. --install-method=copy --enable-executable-stripping --disable-debug-info --overwrite-policy=always
