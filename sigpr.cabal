@@ -5,7 +5,7 @@ cabal-version: 1.12
 -- see: https://github.com/sol/hpack
 
 name:           sigpr
-version:        0.1.0
+version:        1.0.0
 synopsis:       Signal Program Runner
 category:       Development
 license:        MIT

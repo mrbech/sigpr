@@ -4,6 +4,7 @@ text :: String
 text =
   unlines
     [ "Usage: sigpr COMMAND",
+      "version: 1.0.0",
       "",
       "A utility for running arbitrary commands on the signal \"SIGUSR1\"",
       "",
