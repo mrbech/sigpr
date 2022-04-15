@@ -1,5 +1,6 @@
 module Main where
 
+import qualified Help
 import qualified Restart
 import qualified Run
 import qualified System.Environment as Environment
@@ -12,7 +13,9 @@ main = do
     "run" : as ->
       case Run.parseArgs as of
         Just a -> uncurry Run.run a
-        Nothing -> Exit.die "\"sigptr run\" requires a command to run"
+        Nothing -> Exit.die $ "\"sigptr run\" requires a command to run\n" ++ Help.text
     ["restart"] -> Restart.run
-    "restart" : _ -> Exit.die "\"sigptr restart\" takes no arguments"
-    _ -> Exit.die "Unknown command\nAvailable commands: run, restart"
+    "restart" : _ -> Exit.die $ "\"sigptr restart\" takes no arguments\n" ++ Help.text
+    "help" : _ -> putStrLn Help.text
+    [] -> Exit.die Help.text
+    c : _ -> Exit.die $ "Unknown command: " ++ c ++ "\n" ++ Help.text

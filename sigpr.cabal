@@ -15,6 +15,7 @@ build-type:     Simple
 executable sigpr
   main-is: Main.hs
   other-modules:
+      Help
       Restart
       Run
       Paths_sigpr

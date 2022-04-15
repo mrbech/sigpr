@@ -1,2 +1,1 @@
-- help text
 - github action for static builds
