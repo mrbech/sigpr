@@ -1,3 +1,2 @@
-- implement options in README
 - help text
 - github action for static builds

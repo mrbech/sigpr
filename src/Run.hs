@@ -1,7 +1,7 @@
 module Run where
 
 import Control.Concurrent (MVar, newEmptyMVar, putMVar, takeMVar)
-import Control.Monad (void)
+import Control.Monad (void, when)
 import Data.List.NonEmpty (NonEmpty (..))
 import System.Posix
   ( Handler (Catch),
@@ -16,6 +16,21 @@ import System.Posix
     softwareTermination,
     userDefinedSignal1,
   )
+
+data Args = Args
+  { printPid :: Bool,
+    pidFile :: Maybe FilePath
+  }
+  deriving (Show, Eq)
+
+parseArgs :: [String] -> Maybe (Args, NonEmpty String)
+parseArgs = parse Args {printPid = False, pidFile = Nothing}
+  where
+    parse args ("--print-pid" : xs) = parse args {printPid = True} xs
+    parse args ("--pid-file" : f : xs) = parse args {pidFile = Just f} xs
+    parse _ ["--pid-file"] = Nothing
+    parse args (x : xs) = Just (args, x :| xs)
+    parse _ [] = Nothing
 
 runCommand :: MVar () -> NonEmpty String -> IO ()
 runCommand restart command = do
@@ -42,8 +57,21 @@ setupHandler restart =
     handler = do
       putMVar restart ()
 
-run :: NonEmpty String -> IO ()
-run args = do
+outputPid :: IO ()
+outputPid = do
+  pid <- getProcessID
+  print pid
+
+savePidFile :: Maybe FilePath -> IO ()
+savePidFile (Just path) = do
+  pid <- getProcessID
+  writeFile path (show pid)
+savePidFile Nothing = return ()
+
+run :: Args -> NonEmpty String -> IO ()
+run args command = do
   restart <- newEmptyMVar
+  when (printPid args) outputPid
+  savePidFile (pidFile args)
   setupHandler restart
-  runCommand restart args
+  runCommand restart command

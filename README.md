@@ -16,8 +16,6 @@ make scripts that `kill -USR1 <pid>` directly.
 TODO
 
 ## Run command line options
-** Note: options are not implemented yet **
-
 The following options can be provided to `sigpr run <options> <command>`,
 options must be provided before the actual command
 

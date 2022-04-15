@@ -1,6 +1,5 @@
 module Main where
 
-import Data.List.NonEmpty (NonEmpty (..))
 import qualified Restart
 import qualified Run
 import qualified System.Environment as Environment
@@ -10,8 +9,10 @@ main :: IO ()
 main = do
   args <- Environment.getArgs
   case args of
-    "run" : (x : xs) -> Run.run (x :| xs)
-    "run" : _ -> Exit.die "\"sigptr run\" requires at least 1 argument"
+    "run" : as ->
+      case Run.parseArgs as of
+        Just a -> uncurry Run.run a
+        Nothing -> Exit.die "\"sigptr run\" requires a command to run"
     ["restart"] -> Restart.run
     "restart" : _ -> Exit.die "\"sigptr restart\" takes no arguments"
     _ -> Exit.die "Unknown command\nAvailable commands: run, restart"
