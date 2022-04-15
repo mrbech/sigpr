@@ -24,3 +24,15 @@ Installation from source can be done with `cabal install`.
 directory. If you have docker and docker-compose installed `make docker-run`
 will put you into a docker container that has necessary dependencies to do a
 static build.
+
+## VIM
+When developing the `sigpr` and `vim` the following config can be used to execute
+restarts:
+
+```vim
+" Bind <Leader>r to execute a sigpr restart
+noremap <Leader>r <cmd>silent execute '!sigpr restart'<CR>
+
+" Run sigpr restart on file write
+autocmd BufWritePost * silent execute '!sigpr restart'
+```
