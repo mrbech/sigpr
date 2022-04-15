@@ -5,19 +5,35 @@ import Control.Monad (void)
 import Data.List.NonEmpty (NonEmpty (..))
 import System.Posix
   ( Handler (Catch),
+    ProcessGroupID,
+    executeFile,
+    forkProcess,
+    getProcessID,
+    getProcessStatus,
     installHandler,
+    setProcessGroupIDOf,
+    signalProcessGroup,
+    softwareTermination,
     userDefinedSignal1,
   )
-import System.Process (cleanupProcess, createProcess, proc)
 
 runCommand :: MVar () -> NonEmpty String -> IO ()
 runCommand restart command = do
-  h <- runProcess command
+  pgid <- runProcess command
   takeMVar restart
-  cleanupProcess h
+  -- signal the group to ensure everything gets terminated
+  signalProcessGroup softwareTermination pgid
+  -- get status waits on process
+  void $ getProcessStatus True True pgid
   runCommand restart command
   where
-    runProcess (c :| args) = createProcess (proc c args)
+    runProcess :: NonEmpty String -> IO ProcessGroupID
+    runProcess (c :| args) = forkProcess $ do
+      -- we set the process group id to the parent process id
+      -- this makes it possible for the parent process to use pid as pgid
+      pid <- getProcessID
+      setProcessGroupIDOf 0 pid
+      executeFile c True args Nothing
 
 setupHandler :: MVar () -> IO ()
 setupHandler restart =
