@@ -1,6 +1,7 @@
 module Run where
 
 import Control.Concurrent (MVar, newEmptyMVar, putMVar, takeMVar)
+import Control.Exception (finally)
 import Control.Monad (void, when)
 import Data.List.NonEmpty (NonEmpty (..))
 import System.Posix
@@ -36,8 +37,8 @@ runCommand :: MVar () -> NonEmpty String -> IO ()
 runCommand restart command = do
   pgid <- runProcess command
   takeMVar restart
-  -- signal the group to ensure everything gets terminated
-  signalProcessGroup softwareTermination pgid
+    -- signal the group to ensure everything gets terminated
+    `finally` signalProcessGroup softwareTermination pgid
   -- get status waits on process
   void $ getProcessStatus True True pgid
   runCommand restart command
@@ -51,7 +52,7 @@ runCommand restart command = do
       executeFile c True args Nothing
 
 setupHandler :: MVar () -> IO ()
-setupHandler restart =
+setupHandler restart = do
   void $ installHandler userDefinedSignal1 (Catch handler) Nothing
   where
     handler = do
