@@ -6,19 +6,15 @@ build-type: Simple
 
 dependencies:
 - base
-- unix > 2 && < 3
-- directory > 1 && < 2
+- unix
+- directory
 
 executables:
   sigpr:
     main:                Main.hs
     source-dirs:         src
-    cc-options: -static
-    ld-options: -static -pthread
     ghc-options:
     - -Wall
-    - -O2
-    - -static
     - -threaded
     - -Wcompat
     - -Widentities
