@@ -17,7 +17,7 @@
           staticHaskellPackages.callCabal2nix "sigpr" ./. { };
       in
       {
-        packages.default = with pkgs.haskell.lib; justStaticExecutables (enableStaticLibraries staticSigpr);
+        packages.default = staticSigpr;
         devShells.default = haskellPackages.shellFor {
           packages = p: [
             (pkgs.haskell.lib.disableOptimization sigpr)
