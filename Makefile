@@ -1,12 +1,11 @@
+.PHONY: run restart help build-static
+
 run: build-static
-	./sigpr run echo 'test'
+	./result/bin/sigpr run echo 'test'
 restart: build-static
-	./sigpr restart
+	./result/bin/sigpr restart
 help: build-static
-	./sigpr help
+	./result/bin/sigpr help
 build-static:
-	hpack && cabal install --installdir=. --install-method=copy --enable-executable-stripping --disable-debug-info --overwrite-policy=always
-cabal-install-static:
-	hpack && cabal install --install-method=copy --enable-executable-stripping --disable-debug-info --overwrite-policy=always
-docker-run:
-	docker-compose run sigpr bash
+	hpack
+	nix build

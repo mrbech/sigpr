@@ -20,11 +20,6 @@ page](https://github.com/mrbech/sigpr/releases).
 
 Installation from source can be done with `cabal install`.
 
-`make build-static` will build a fully static binary and put in the current
-directory. If you have docker and docker-compose installed `make docker-run`
-will put you into a docker container that has necessary dependencies to do a
-static build.
-
 ## VIM
 When developing with `sigpr` and `vim` the following config can be used to execute
 restarts:
